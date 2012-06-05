@@ -7,6 +7,7 @@ The Socket class used by fancywebsocket is used with modification. For more deta
 Lets try to make it more compatible with zend-framework structure and get the best out of it.
 
 Special thanks to
-Ajay Patel
-Dharmesh Patel
-Jimit Shah
+Ajay Patel,
+Dharmesh Patel,
+Jimit Shah.
+For their precious help.
