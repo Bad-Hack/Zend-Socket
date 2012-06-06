@@ -273,7 +273,7 @@ class Pws_Server {
 		$closeStatus = $this->wsClients [$clientID] [5];
 		if (array_key_exists ( 'close', $this->wsOnEvents ))
 			foreach ( $this->wsOnEvents ['close'] as $func )
-				$func ( $clientID, $closeStatus );
+				$func ( $this ,$clientID, $closeStatus );
 			
 			// close socket
 		$socket = $this->wsClients [$clientID] [0];
@@ -318,7 +318,7 @@ class Pws_Server {
 				
 				if (array_key_exists ( 'open', $this->wsOnEvents ))
 					foreach ( $this->wsOnEvents ['open'] as $func )
-						$func ( $clientID );
+						$func ( $this ,$clientID );
 			}
 		} else {
 			// ready state is set to closed
@@ -476,8 +476,8 @@ class Pws_Server {
 		$mask = $octet1 & self::WS_MASK;
 		if (! $mask)
 			return false; // close socket, as no mask bit was sent from
-			                          // the client
-				                          
+				              // the client
+				              
 		// fetch byte position where the mask key starts
 		$seek = $this->wsClients [$clientID] [7] <= 125 ? 2 : ($this->wsClients [$clientID] [7] <= 65535 ? 4 : 10);
 		
@@ -594,7 +594,7 @@ class Pws_Server {
 		} elseif ($opcode == self::WS_OPCODE_TEXT || $opcode == self::WS_OPCODE_BINARY) {
 			if (array_key_exists ( 'message', $this->wsOnEvents ))
 				foreach ( $this->wsOnEvents ['message'] as $func )
-					$func ( $clientID, $data, $dataLength, $opcode == self::WS_OPCODE_BINARY );
+					$func ( $this ,$clientID, $data, $dataLength, $opcode == self::WS_OPCODE_BINARY );
 		} else {
 			// unknown opcode
 			return false;
@@ -645,7 +645,7 @@ class Pws_Server {
 			return false;
 			
 			// check Sec-WebSocket-Key header was received and decoded value
-		// length is 16
+			// length is 16
 		if (! isset ( $headersKeyed ['Sec-WebSocket-Key'] ))
 			return false;
 		$key = $headersKeyed ['Sec-WebSocket-Key'];
@@ -655,18 +655,18 @@ class Pws_Server {
 			// check Sec-WebSocket-Version header was received and value is 7
 		if (! isset ( $headersKeyed ['Sec-WebSocket-Version'] ) || ( int ) $headersKeyed ['Sec-WebSocket-Version'] < 7)
 			return false; // should
-			                                                                                                                      // really
-			                                                                                                                      // be
-			                                                                                                                      // !=
-			                                                                                                                      // 7,
-			                                                                                                                      // but
-			                                                                                                                      // Firefox
-			                                                                                                                      // 7
-			                                                                                                                      // beta
-			                                                                                                                      // users
-			                                                                                                                      // send
-			                                                                                                                      // 8
-				                                                                                                                      
+				              // really
+				              // be
+				              // !=
+				              // 7,
+				              // but
+				              // Firefox
+				              // 7
+				              // beta
+				              // users
+				              // send
+				              // 8
+				              
 		// work out hash to use in Sec-WebSocket-Accept reply header
 		$hash = base64_encode ( sha1 ( $key . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11', true ) );
 		
@@ -737,9 +737,11 @@ class Pws_Server {
 			} else {
 				$payloadLength = self::WS_PAYLOAD_LENGTH_63;
 				$payloadLengthExtended = pack ( 'xxxxN', $bufferLength ); // pack 32
-				                                                       // bit int, should
-				                                                       // really be 64 bit
-				                                                       // int
+				                                                          // bit
+				                                                          // int, should
+				                                                          // really
+				                                                          // be 64 bit
+				                                                          // int
 				$payloadLengthExtendedLength = 8;
 			}
 			
