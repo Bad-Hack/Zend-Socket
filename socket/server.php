@@ -15,6 +15,7 @@ set_include_path ( implode ( PATH_SEPARATOR, array (
 		realpath ( APPLICATION_PATH . '/../library' ),
 		get_include_path () 
 ) ) );
+
 /**
  * Zend_Application
  */
@@ -34,13 +35,11 @@ $application->bootstrap ();
 set_time_limit ( 0 );
 
 // Creating the Pws_Server
-$Server = new Pws_Server ();
+$Server = new Pws_Server ($application);
 
 function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
-	
-	$messageController = new Pws_Controller_Message ( $Server );
+	$messageController = new Pws_Controller_Message ( $Server, $clientID );
 	$options = array (
-			'client_id' => $clientID,
 			'message' => $message,
 			'message_length' => $messageLength,
 			'binary' => $binary 
@@ -53,11 +52,7 @@ function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
 
 // when a client connects
 function wsOnOpen($Server, $clientID) {
-	$openController = new Pws_Controller_Open ( $Server );
-	$options = array (
-			'client_id' => $clientID 
-	);
-	$openController->setOptions ( $options );
+	$openController = new Pws_Controller_Open ( $Server, $clientID );
 	$openController->beforeOpen ();
 	$openController->onOpen ();
 	$openController->afterOpen ();
@@ -65,15 +60,14 @@ function wsOnOpen($Server, $clientID) {
 
 // when a client closes or lost connection
 function wsOnClose($Server, $clientID, $status) {
-	$closeController = new Pws_Controller_Close ( $Server );
+	$closeController = new Pws_Controller_Close ( $Server, $clientID );
 	$options = array (
-			'client_id' => $clientID,
 			'status' => $status 
 	);
 	$closeController->setOptions ( $options );
-	$closeController->beforeClose();
+	$closeController->beforeClose ();
 	$closeController->onClose ();
-	$closeController->afterClose();
+	$closeController->afterClose ();
 }
 $Server->bind ( 'message', 'wsOnMessage' );
 $Server->bind ( 'open', 'wsOnOpen' );
