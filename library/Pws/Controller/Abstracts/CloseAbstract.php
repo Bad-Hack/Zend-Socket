@@ -1,10 +1,9 @@
 <?php
 abstract class Pws_Controller_Abstracts_CloseAbstract extends Pws_Controller_Abstracts_Abstract {
-	protected $_client_id;
+	protected $_status;
 	
 	public function setOptions(array $options) {
-		$this->_client_id = $options ['status'];
-		$this->_client_id = $options ['client_id'];
+		$this->_status = $options ['status'];
 	}
 	public function beforeClose() {
 	}

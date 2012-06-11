@@ -71,7 +71,16 @@ class Pws_Server {
 	public $wsClientCount = 0;
 	public $wsClientIPCount = array ();
 	public $wsOnEvents = array ();
+	protected $_zend_application;
 	
+	
+	public function __construct(Zend_Application $application){
+		$this->_zend_application = $application;
+	}
+	
+	public function getZendApplicationObject(){
+		return $this->_zend_application;
+	}
 	/*
 	 * $this->wsClients[ integer ClientID ] = array( 0 => resource Socket, //
 	 * client socket 1 => string MessageBuffer, // a blank string when there's

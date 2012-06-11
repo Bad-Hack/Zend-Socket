@@ -1,7 +1,7 @@
 <?php
 class Pws_Controller_Close extends Pws_Controller_Abstracts_CloseAbstract {
 	public function onClose() {
-		$ip = long2ip ( $this->Server->wsClients [$this->_client_id] [6] );
+		$ip = $this->_client_ip;
 		
 		$this->Server->log ( "$ip ({$this->_client_id}) has disconnected." );
 		
