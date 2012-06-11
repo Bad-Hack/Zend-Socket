@@ -9,5 +9,6 @@ Lets try to make it more compatible with zend-framework structure and get the be
 Special thanks to
 Ajay Patel,
 Dharmesh Patel,
+Krunal Shah,
 Jimit Shah.
 For their precious help.
