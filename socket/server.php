@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Including Zend Required Modules
  * This is for making the avaibility of zend default functionality
@@ -37,6 +36,10 @@ set_time_limit ( 0 );
 // Creating the Pws_Server
 $Server = new Pws_Server ($application);
 
+// Define socket environment
+defined ( 'PWS_ENV' ) || define ( 'PWS_ENV', (getenv ( 'PWS_ENV' ) ? getenv ( 'PWS_ENV' ) : 'development') );
+
+
 function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
 	$messageController = new Pws_Controller_Message ( $Server, $clientID );
 	$options = array (
@@ -45,9 +48,13 @@ function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
 			'binary' => $binary 
 	);
 	$messageController->setOptions ( $options );
+	try{
 	$messageController->beforeMessage ();
 	$messageController->onMessage ();
 	$messageController->afterMessage ();
+	}catch(Pws_Exception $e){
+		$messageController->sendMessage($e->getMessage());
+	}
 }
 
 // when a client connects

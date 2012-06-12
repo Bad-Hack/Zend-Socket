@@ -9,8 +9,9 @@ class Default_IndexController extends Zend_Controller_Action {
 	public function indexAction() {
 	}
 	public function testingAction(){
-		print_r("This is testing");
-		die;
+		echo "this is what is written in the controller";
+		echo "HAHAHA!";
+		return;
 	}
 }
 

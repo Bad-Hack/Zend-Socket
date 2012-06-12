@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Based on PHP WebSocket Server 0.2 -
  * http://code.google.com/p/php-websocket-server/ -
