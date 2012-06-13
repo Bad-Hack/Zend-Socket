@@ -49,8 +49,8 @@ input,textarea {
 			$('#message').keypress(function(e) {
 				if ( e.keyCode == 13 && this.value ) {
 					log( 'You: ' + this.value );
-					send( this.value );
-
+					message = '{"message":"tirth","action":"testing","controller":"index","module":"default"}';
+					send( message );
 					$(this).val('');
 				}
 			});
@@ -67,7 +67,9 @@ input,textarea {
 
 			//Log any messages sent from server
 			Server.bind('message', function( payload ) {
-				log( payload );
+				json = $.parseJSON(payload);
+				console.log(payload);
+				$(".output").html(json.message);
 			});
 
 			Server.connect();
@@ -80,5 +82,6 @@ input,textarea {
 		<textarea id='log' name='log' readonly='readonly'></textarea>
 		<br /> <input type='text' id='message' name='message' />
 	</div>
+	<div class="output"></div>
 </body>
 </html>

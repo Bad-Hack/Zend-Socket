@@ -13,5 +13,9 @@ class Default_IndexController extends Zend_Controller_Action {
 		echo "HAHAHA!";
 		return;
 	}
+	public function myAction(){
+		echo "Hello Ajay";
+		return;
+	}
 }
 

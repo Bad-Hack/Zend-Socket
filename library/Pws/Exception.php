@@ -1,17 +1,14 @@
 <?php
-class Pws_Exception {
-	protected $_zend_exception = null;
+class Pws_Exception extends Exception {
 	protected $_exception = null;
 	
 	/**
 	 * Accept Zend_Exception | Exception class objects
 	 * 
-	 * @param Zend_Exception|Exception $ze        	
+	 * @param Exception $ze        	
 	 */
-	public function __construct($ze = null) {
-		if ($ze instanceof Zend_Exception) {
-			$this->_zend_exception = $ze;
-		} else if ($ze instanceof Exception) {
+	public function __construct(Exception $ze = null) {
+		if ($ze instanceof Exception) {
 			$this->_exception = $ze;
 		} else if (is_string ( $ze )) {
 			$this->_exception = new Exception ( $ze );
@@ -19,19 +16,17 @@ class Pws_Exception {
 			$this->_exception = new Exception ( "Error" );
 		}
 	}
-	public function getMessage() {
+	public function getPwsMessage() {
 		if (PWS_ENV === "production") {
 			return "Error";
 		}
-		if (null != $this->_zend_exception) {
-			return $this->_zend_exception->getMessage ();
-		} else if (null != $this->_exception) {
+		if (null != $this->_exception) {
 			return $this->_exception->getMessage ();
 		}
 		return "Error";
 	
 	}
 	public function getException() {
-		return $this->_zend_exception == null ? $this->_exception : $this->_zend_exception;
+		return $this->_exception;
 	}
 }

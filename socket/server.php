@@ -34,11 +34,10 @@ $application->bootstrap ();
 set_time_limit ( 0 );
 
 // Creating the Pws_Server
-$Server = new Pws_Server ($application);
+$Server = new Pws_Server ( $application );
 
 // Define socket environment
 defined ( 'PWS_ENV' ) || define ( 'PWS_ENV', (getenv ( 'PWS_ENV' ) ? getenv ( 'PWS_ENV' ) : 'development') );
-
 
 function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
 	$messageController = new Pws_Controller_Message ( $Server, $clientID );
@@ -48,12 +47,13 @@ function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
 			'binary' => $binary 
 	);
 	$messageController->setOptions ( $options );
-	try{
-	$messageController->beforeMessage ();
-	$messageController->onMessage ();
-	$messageController->afterMessage ();
-	}catch(Pws_Exception $e){
-		$messageController->sendMessage($e->getMessage());
+	try {
+		$messageController->beforeMessage ();
+		$messageController->onMessage ();
+		$messageController->afterMessage ();
+	} catch ( Exception $e ) {
+		$exception = new Pws_Exception($e);
+		$messageController->sendMessage ( $exception->getPwsMessage () );
 	}
 }
 

@@ -813,4 +813,19 @@ class Pws_Server {
 		else
 			$this->wsOnEvents = array ();
 	}
+	
+	/**
+	 * Check if Client Exists
+	 * @param int $clientID
+	 * @return boolean
+	 */
+	function hasClient($clientID=null){
+		if(null==$clientID || $clientID===false){
+			return false;
+		}
+		if(array_key_exists($clientID, $this->wsClients)){
+			return true;
+		}
+		return false;
+	}
 }
