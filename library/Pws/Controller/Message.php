@@ -83,9 +83,8 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 		$config = new Zend_Config_Ini ( APPLICATION_PATH . '/configs/application.ini' );
 		$config = $config->toArray ();
 		
-		$request = new Zend_Controller_Request_Simple($action,$controller,$module);
 		$request = new Zend_Controller_Request_Http();
-		$request->setModuleName($module)->setControllerName($controller)->setActionKey($action);
+		$request->setModuleName($module)->setControllerName($controller)->setActionName($action);
 		
 		$baseUrl = "";
 		if(isset($config['production'] ['resources'] ['frontController'] ['baseUrl'])){
@@ -93,36 +92,44 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 		}else if(isset($config['development'] ['resources'] ['frontController'] ['baseUrl'])){
 			$baseUrl = $config['development'] ['resources'] ['frontController'] ['baseUrl'];
 		}
-		$requestUri = $baseUrl."/".$module."/".$controller."/".$action;
-		echo $requestUri;
-		//$requestUri = $module."/".$controller."/".$action;
-		$request->setRequestUri($requestUri);
-		//$_SERVER["REQUEST_URI"] = $requestUri;  
-		//$router = new Zend_Controller_Router_Rewrite();
-		//$router->route($request);
-		
-		$frontController = Zend_Controller_Front::getInstance()->returnResponse(true)->setParam('noViewRenderer', false)->setParam('noErrorHandler', false);
-		//$frontController->setRouter($router);
+		$frontController = Zend_Controller_Front::getInstance()->returnResponse(true);
 		
 		// Check if default module prefix is enabled or not
 		$prefixDefaultModule = isset ( $config [APPLICATION_ENV] ['resources'] ['frontController'] ['prefixDefaultModule'] ) ? $config [APPLICATION_ENV] ['resources'] ['frontController'] ['prefixDefaultModule'] == 1 : false;
-		$dispatcher = $frontController->getDispatcher();
-		$dispatcher->setParam('prefixDefaultModule', $prefixDefaultModule);
-		
-		//$frontController->setDispatcher($dispatcher);
 		
 		$response = new Zend_Controller_Response_Http();
 		
-		$frontController->setParam('prefixDefaultModule', $prefixDefaultModule);
-		$frontController->dispatch($request, $response);
-		//$frontController->setDefaultModule($module);
-		//$frontController->setDefaultControllerName($controller);
-		//$frontController->setDefaultAction($action);
-		//$response = $dispatcher->getResponse();
+		$frontController->getDispatcher()
+						->setParam('prefixDefaultModule', $prefixDefaultModule)
+						->dispatch($request, $response);
+		
+		$dispatcher = $frontController->getDispatcher();
+		
+		if (!$dispatcher->isDispatchable($request)) {
+			$controller = $request->getControllerName();
+			if (!$dispatcher->getParam('useDefaultControllerAlways') && !empty($controller)) {
+				require_once 'Zend/Controller/Dispatcher/Exception.php';
+				throw new Zend_Controller_Dispatcher_Exception('Invalid controller specified (' . $request->getControllerName() . ')');
+			}
+		
+			$className = $dispatcher->getDefaultControllerClass($request);
+		} else {
+			$className = $dispatcher->getControllerClass($request);
+			if (!$className) {
+				$className = $dispatcher->getDefaultControllerClass($request);
+			}
+		}
+		$className = $dispatcher->formatClassName($module , $className);
+		
+		/**
+		 * Instantiate controller with request, response, and invocation
+		 * arguments; throw exception if it's not an action controller
+		 */
+		$controller = new $className($request, $dispatcher->getResponse(), $dispatcher->getParams());
+		$controller->render();
 		
 		$this->_response = $response->getBody();
 		$this->_responseClients = array();
-		
 	}
 	
 	/**

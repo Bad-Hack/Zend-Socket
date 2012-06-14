@@ -49,7 +49,7 @@ input,textarea {
 			$('#message').keypress(function(e) {
 				if ( e.keyCode == 13 && this.value ) {
 					log( 'You: ' + this.value );
-					message = '{"message":"tirth","action":"testing","controller":"index","module":"default"}';
+					message = '{"message":"tirth","action":"index","controller":"index","module":"default"}';
 					send( message );
 					$(this).val('');
 				}
