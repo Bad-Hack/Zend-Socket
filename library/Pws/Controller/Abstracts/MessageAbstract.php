@@ -24,27 +24,24 @@ abstract class Pws_Controller_Abstracts_MessageAbstract extends Pws_Controller_A
 	 * @access protected
 	 * @var string $_binary
 	 */
-	protected $_binary;
+	protected $_binary;	
+	
 	
 	/**
-	 * Setting the options as variables passed and available
-	 * (non-PHPdoc)
-	 * @see Pws_Controller_Abstracts_Abstract::setOptions()
-	 * @access public
-	 */
-	public function setOptions(array $options) {
-		$this->_message = $options ['message'];
-		$this->_message_length = $options ['message_length'];
-		$this->_binary = $options ['binary'];
-	}
-	
-	/**
-	 * 
+	 * Prototype for method before any message is processed
 	 */
 	public function beforeMessage() {
 	}
+	
+	/**
+	 * Prototype for method on processing message
+	 */
 	public function onMessage() {
 	}
+	
+	/**
+	 * Prototype for method after processing message
+	 */
 	public function afterMessage() {
 	}
 }
