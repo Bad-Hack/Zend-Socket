@@ -52,8 +52,12 @@ function wsOnMessage($Server, $clientID, $message, $messageLength, $binary) {
 		$messageController->onMessage ();
 		$messageController->afterMessage ();
 	} catch ( Exception $e ) {
-		$exception = new Pws_Exception($e);
-		$messageController->sendMessage ( $exception->getPwsMessage () );
+		$exception = new Pws_Exception ( $e );
+		$error = array (
+				'message' => $e->getMessage (),
+				'code' => $e->getCode () 
+		);
+		$messageController->sendMessage ( 'nok', array (), $error );
 	}
 }
 

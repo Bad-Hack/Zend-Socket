@@ -26,6 +26,8 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 			return;
 		}
 		// Else send the message according
+		$this->_response = htmlentities($this->_response);
+		
 		$this->sendMessage ( $this->_response, $this->_responseClients );
 	}
 	
@@ -35,8 +37,9 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 	 * @param mixed $message        	
 	 * @param array $clients        	
 	 */
-	public function sendMessage($message, array $clients = array()) {
-		$message = $this->_generateValidMessage ( $message );
+	public function sendMessage($message, array $clients = array() , array $error = array()) {
+		
+		$message = $this->_generateValidMessage ( $message ,$error);
 		if (empty ( $clients )) {
 			if (empty ( $this->_responseClients )) {
 				array_push ( $clients, $this->_client_id );
@@ -135,7 +138,7 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 	 *
 	 * @param mixed $message        	
 	 */
-	private function _generateValidMessage($message = null) {
+	private function _generateValidMessage($message = null, array $error = array()) {
 		// Convert null message to string
 		$message = null == $message ? "" : $message;
 		
@@ -147,6 +150,10 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 			$messageArray ['dataType'] = isset ( $message ['dataType'] ) && $message ['dataType'] != null ? $message ['dataType'] : $this->getDefaultDataType ();
 			$messageArray ['response'] = isset ( $message ['response'] ) && $message ['response'] != null ? $message ['response'] : $this->_response;
 		}
+		if(!empty($error)){
+			$messageArray['status'] = $error;
+		}
+		
 		if (strtolower ( $this->getDefaultDataType () ) == "json") {
 			$responseMessage = Zend_Json::encode ( $messageArray );
 		}
