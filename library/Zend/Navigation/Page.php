@@ -14,9 +14,9 @@
  *
  * @category  Zend
  * @package   Zend_Navigation
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Page.php 24854 2012-05-31 23:44:06Z adamlundrigan $
+ * @version    $Id: Page.php 24455 2011-09-11 12:51:54Z padraic $
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Navigation/Container.php';
  *
  * @category  Zend
  * @package   Zend_Navigation
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Navigation_Page extends Zend_Navigation_Container
@@ -258,14 +258,9 @@ abstract class Zend_Navigation_Page extends Zend_Navigation_Container
             return new Zend_Navigation_Page_Uri($options);
         } else {
             require_once 'Zend/Navigation/Exception.php';
-            
-            $message = 'Invalid argument: Unable to determine class to instantiate';
-            if (isset($options['label'])) {
-                $message .= ' (Page label: ' . $options['label'] . ')';
+            throw new Zend_Navigation_Exception(
+                'Invalid argument: Unable to determine class to instantiate');
         }
-            
-            throw new Zend_Navigation_Exception($message);
-    }
     }
 
     /**
