@@ -1,5 +1,11 @@
 <?php
 
+// Define Shortcut for DIRECTORY_SEPERATOR
+defined ( 'DS' ) || define ( 'DS', DIRECTORY_SEPARATOR );
+
+// Define Shortcut for PATH_SEPERATOR
+defined ( 'PS' ) || define ( 'PS', PATH_SEPARATOR);
+
 // Define path to application directory
 defined ( 'APPLICATION_PATH' ) || define ( 'APPLICATION_PATH', realpath ( dirname ( __FILE__ ) . '/../application' ) );
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configdata>
+	<mandatory>
+		<production>
+			<javascript><![CDATA[jquery.min.js]]></javascript>
+			<javascript><![CDATA[jquery.ui.min.js]]></javascript>
+		</production>
+		<development>
+			<javascript><![CDATA[jquery.js]]></javascript>
+			<javascript><![CDATA[jquery.ui.min.js]]></javascript>
+		</development>
+	</mandatory>
+	<modules>
+		<default>
+			<production>
+			</production>
+			<development>
+			</development>	
+		</default>
+		<admin>
+		</admin>
+	</modules>
+</configdata>
