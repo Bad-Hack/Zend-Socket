@@ -3,14 +3,14 @@ class Plugin_Loadhead extends Zend_Controller_Plugin_Abstract {
 	/**
 	 * Store the loaded scripts.
 	 * Just to keep record
-	 * 
+	 *
 	 * @var array $_loaded
 	 */
 	protected $_loaded = array ();
 	
 	/**
 	 * Store the request variable
-	 * 
+	 *
 	 * @var Zend_Controller_Request_Abstract $_request
 	 */
 	protected $_request;
@@ -23,30 +23,13 @@ class Plugin_Loadhead extends Zend_Controller_Plugin_Abstract {
 		$this->_request = $request;
 		
 		// Set the absolute path for the public folder
-		Zend_Registry::isRegistered('absolutePublicPath')?:Zend_Registry::set('absolutePublicPath', $_SERVER['DOCUMENT_ROOT'].$this->_request->getBasePath());
+		Zend_Registry::isRegistered ( 'absolutePublicPath' ) ?  : Zend_Registry::set ( 'absolutePublicPath', $_SERVER ['DOCUMENT_ROOT'] . $this->_request->getBasePath () );
 		
 		// Store the ViewRenderer
-		$this->view = Zend_Controller_Action_HelperBroker::getExistingHelper('ViewRenderer')->view;
+		$this->view = Zend_Controller_Action_HelperBroker::getExistingHelper ( 'ViewRenderer' )->view;
 		
 		// Load head scripts by default
-		$this->_loadHead();
-		
-		/*echo "<pre>";
-		print_r(APPLICATION_PATH);
-		echo "<br />PathInfo: <br />";
-		print_r($request->getPathInfo());
-		echo "<br />Server Variable: <br />";
-		print_r($_SERVER);
-		echo "<br />Class Methods: <br />";
-		print_r(get_class_methods(get_class($request)));
-		echo "<br />Class Variables: <br />";
-		print_r(get_class_vars((get_class($request))));
-		echo "<br />Request Data: <br />";
-		print_r($request);
-		echo "<br />Get Base Path: <br />";
-		print_r($request->getBasePath());
-		die;
-		*/
+		$this->_loadHead ();
 	}
 	
 	// Loading the JS Dynamically as per the configurations
@@ -55,7 +38,7 @@ class Plugin_Loadhead extends Zend_Controller_Plugin_Abstract {
 			return true;
 		}
 		try {
-			$js_path = Zend_Registry::get('absolutePublicPath').DS."js".DS."js.xml";
+			$js_path = Zend_Registry::get ( 'absolutePublicPath' ) . DS . "js" . DS . "js.xml";
 			$js_data = new Zend_Config_Xml ( $js_path );
 		} catch ( Zend_Exception $ex ) {
 			return false;
@@ -82,7 +65,6 @@ class Plugin_Loadhead extends Zend_Controller_Plugin_Abstract {
 		
 		// Module Wise Javascripts
 		if (isset ( $scripts ['modules'] [$module_name] ) && isset ( $scripts ['modules'] [$module_name] [APPLICATION_ENV] ) && isset ( $scripts ['modules'] [$module_name] [APPLICATION_ENV] ['javascript'] )) {
-			
 			$module_scripts = $scripts ['modules'] [$module_name] [APPLICATION_ENV] ['javascript'];
 			if (! is_array ( $module_scripts )) {
 				$module_scripts = array (

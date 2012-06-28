@@ -12,10 +12,6 @@
 	</mandatory>
 	<modules>
 		<default>
-			<production>
-			</production>
-			<development>
-			</development>	
 		</default>
 		<admin>
 		</admin>

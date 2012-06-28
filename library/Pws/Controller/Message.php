@@ -26,7 +26,7 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 			return;
 		}
 		// Else send the message according
-		$this->_response = htmlentities($this->_response);
+		$this->_response = htmlentities ( $this->_response );
 		
 		$this->sendMessage ( $this->_response, $this->_responseClients );
 	}
@@ -37,9 +37,9 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 	 * @param mixed $message        	
 	 * @param array $clients        	
 	 */
-	public function sendMessage($message, array $clients = array() , array $error = array()) {
+	public function sendMessage($message, array $clients = array(), array $error = array()) {
 		
-		$message = $this->_generateValidMessage ( $message ,$error);
+		$message = $this->_generateValidMessage ( $message, $error );
 		if (empty ( $clients )) {
 			if (empty ( $this->_responseClients )) {
 				array_push ( $clients, $this->_client_id );
@@ -104,30 +104,32 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 		
 		$frontController->getDispatcher ()->setParam ( 'prefixDefaultModule', $prefixDefaultModule )->dispatch ( $request, $response );
 		
-		$dispatcher = $frontController->getDispatcher ();
-		
-		if (! $dispatcher->isDispatchable ( $request )) {
-			$controller = $request->getControllerName ();
-			if (! $dispatcher->getParam ( 'useDefaultControllerAlways' ) && ! empty ( $controller )) {
-				require_once 'Zend/Controller/Dispatcher/Exception.php';
-				throw new Zend_Controller_Dispatcher_Exception ( 'Invalid controller specified (' . $request->getControllerName () . ')' );
-			}
-			
-			$className = $dispatcher->getDefaultControllerClass ( $request );
-		} else {
-			$className = $dispatcher->getControllerClass ( $request );
-			if (! $className) {
-				$className = $dispatcher->getDefaultControllerClass ( $request );
-			}
-		}
-		$className = $dispatcher->formatClassName ( $module, $className );
-		
 		/**
-		 * Instantiate controller with request, response, and invocation
-		 * arguments; throw exception if it's not an action controller
+		 * This code of block was set to patch the render view and thus the
+		 * PHTML file
+		 * Please maintain this code if future bugs are found.
+		 * @solution : This code is needed if the views are not initialized in
+		 * application.ini
 		 */
-		$controller = new $className ( $request, $dispatcher->getResponse (), $dispatcher->getParams () );
-		$controller->render ();
+		/*
+		 * $dispatcher = $frontController->getDispatcher (); if (!
+		 * $dispatcher->isDispatchable ( $request )) { $controller =
+		 * $request->getControllerName (); if (! $dispatcher->getParam (
+		 * 'useDefaultControllerAlways' ) && ! empty ( $controller )) {
+		 * require_once 'Zend/Controller/Dispatcher/Exception.php'; throw new
+		 * Zend_Controller_Dispatcher_Exception ( 'Invalid controller specified
+		 * (' . $request->getControllerName () . ')' ); } $className =
+		 * $dispatcher->getDefaultControllerClass ( $request ); } else {
+		 * $className = $dispatcher->getControllerClass ( $request ); if (!
+		 * $className) { $className = $dispatcher->getDefaultControllerClass (
+		 * $request ); } } $className = $dispatcher->formatClassName ( $module,
+		 * $className ); /** Instantiate controller with request, response, and
+		 * invocation arguments; throw exception if it's not an action
+		 * controller
+		 */
+		// $controller = new $className ( $request, $dispatcher->getResponse (),
+		// $dispatcher->getParams () );
+		// $controller->render ();
 		
 		$this->_response = $response->getBody ();
 		$this->_responseClients = array ();
@@ -150,8 +152,8 @@ class Pws_Controller_Message extends Pws_Controller_Abstracts_MessageAbstract {
 			$messageArray ['dataType'] = isset ( $message ['dataType'] ) && $message ['dataType'] != null ? $message ['dataType'] : $this->getDefaultDataType ();
 			$messageArray ['response'] = isset ( $message ['response'] ) && $message ['response'] != null ? $message ['response'] : $this->_response;
 		}
-		if(!empty($error)){
-			$messageArray['status'] = $error;
+		if (! empty ( $error )) {
+			$messageArray ['status'] = $error;
 		}
 		
 		if (strtolower ( $this->getDefaultDataType () ) == "json") {
