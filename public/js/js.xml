@@ -4,10 +4,12 @@
 		<production>
 			<javascript><![CDATA[jquery.min.js]]></javascript>
 			<javascript><![CDATA[jquery.ui.min.js]]></javascript>
+			<javascript><![CDATA[ZS.js]]></javascript>
 		</production>
 		<development>
 			<javascript><![CDATA[jquery.js]]></javascript>
 			<javascript><![CDATA[jquery.ui.min.js]]></javascript>
+			<javascript><![CDATA[ZS.js]]></javascript>
 		</development>
 	</mandatory>
 	<modules>

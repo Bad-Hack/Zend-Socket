@@ -20,7 +20,11 @@ input,textarea {
 	line-height: 20px
 }
 </style>
-<script src="/zs/public/js/fancywebsocket.js"></script>
+<?php
+//echo "<pre>";
+//print_r($this);
+//echo "</pre>"; 
+?>
 <script type="text/javascript">
 		var Server;
 
@@ -33,12 +37,12 @@ input,textarea {
 		}
 
 		function send( text ) {
-			Server.send( 'message', text );
+			Server.send( text );
 		}
 
 		$(document).ready(function() {
 			log('Connecting...');
-			Server = new FancyWebSocket('ws://192.168.3.253:9000');
+			Server = new ZS('ws://192.168.3.253:9000');
 
 			$('#message').keypress(function(e) {
 				if ( e.keyCode == 13 && this.value ) {
@@ -74,4 +78,3 @@ input,textarea {
 	<br /> <input type='text' id='message' name='message' />
 </div>
 <div class="output"></div>
-<?php echo "<p>".$this->tirth."</p>";?>
