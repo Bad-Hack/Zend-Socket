@@ -10,28 +10,49 @@ var ZS = function(url) {
 	};
 
 	this.send = function(event_data) {
-		this.conn.send(event_data);
+		try{
+			this.conn.send(event_data);
+		} catch (err) {
+			log(err.message);
+		}
 		return this;
 	};
 
 	this.connect = function() {
-		// For mozilla web-socket
-		if (typeof (MozWebSocket) == 'function')
-			this.conn = new MozWebSocket(this.ws_url);
-		else
-			this.conn = new WebSocket(this.ws_url);
+		try {
+			// For mozilla web-socket
+			if (typeof (MozWebSocket) == 'function')
+				this.conn = new MozWebSocket(this.ws_url);
+			else
+				this.conn = new WebSocket(this.ws_url);
+		} catch (err) {
+			log(err.message);
+		}
 
 		// dispatch to the right handlers
-		this.conn.onmessage = function(evt) {
-			dispatch('message', evt.data);
-		};
+		try {
+			this.conn.onmessage = function(evt) {
+				dispatch('message', evt.data);
+			};
+		} catch (err) {
+			log(err.message);
+		}
 
-		this.conn.onclose = function() {
-			dispatch('close', null);
-		};
-		this.conn.onopen = function() {
-			dispatch('open', null);
-		};
+		try {
+			this.conn.onclose = function() {
+				dispatch('close', null);
+			};
+		} catch (err) {
+			log(err.message);
+		}
+		try {
+			this.conn.onopen = function() {
+				dispatch('open', null);
+			};
+		} catch (err) {
+			log(err.message);
+		}
+
 	};
 
 	this.disconnect = function() {

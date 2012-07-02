@@ -4,9 +4,9 @@ input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
 #log {width: 100%;height: 400px}
 #message {width: 100%;line-height: 20px}
 <?php $this->placeholder('css')->captureEnd(); ?>
+<script type="text/javascript">
 <?php $this->headScript()->captureStart()?>
 	var Server;
-
 	function log( text ) {
 		$log = $('#log');
 		//Add text to log
@@ -22,6 +22,7 @@ input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
 	$(document).ready(function() {
 		log('Connecting...');
 		Server = new ZS('ws://192.168.3.253:9000');
+		
 
 		$('#message').keypress(function(e) {
 			if ( e.keyCode == 13 && this.value ) {
@@ -52,6 +53,7 @@ input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
 		Server.connect();
 	});
 <?php $this->headScript()->captureEnd(); ?>
+</script>
 <div id='body'>
 	<?php echo $this->form;?>
 	<!-- <textarea id='log' name='log' readonly='readonly'></textarea>  -->
