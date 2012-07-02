@@ -2,10 +2,16 @@
 <html>
 <head>
     <?php echo $this->headTitle();?>
-    <?php echo $this->headScript();?>
-    <?php echo $this->headStyle();?>
+    <?php echo $this->headStyle()->appendStyle($this->placeholder('css'));?>
+    <?php
+		if ($this->dojo ()->isEnabled ()) {
+			$this->dojo ()->setDjConfigOption ( 'usePlainJson', true )->addStylesheetModule ( 'dijit.themes.tundra' )->setLocalPath ( $this->baseUrl()."/js/dojo/dojo/dojo.js" );
+			echo $this->dojo ();
+		}
+	?>
+	<?php echo $this->headScript();?>
 </head>
-<body>
+<body <?php echo $this->dojo ()->isEnabled ()?"class='tundra'":"";?>>
 	<?php
 	echo $this->layout ()->content;
 	?>

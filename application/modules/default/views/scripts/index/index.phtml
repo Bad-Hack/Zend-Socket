@@ -1,80 +1,60 @@
-<style>
-input,textarea {
-	border: 1px solid #CCC;
-	margin: 0px;
-	padding: 0px
-}
+<?php $this->placeholder('css')->captureStart(); ?>
+input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
+#body {max-width: 800px;margin: auto}
+#log {width: 100%;height: 400px}
+#message {width: 100%;line-height: 20px}
+<?php $this->placeholder('css')->captureEnd(); ?>
+<?php $this->headScript()->captureStart()?>
+	var Server;
 
-#body {
-	max-width: 800px;
-	margin: auto
-}
+	function log( text ) {
+		$log = $('#log');
+		//Add text to log
+		$log.append(($log.val()?"\n":'')+text);
+		//Autoscroll
+		$log[0].scrollTop = $log[0].scrollHeight - $log[0].clientHeight;
+	}
 
-#log {
-	width: 100%;
-	height: 400px
-}
+	function send( text ) {
+		Server.send( text );
+	}
 
-#message {
-	width: 100%;
-	line-height: 20px
-}
-</style>
-<?php
-//echo "<pre>";
-//print_r($this);
-//echo "</pre>"; 
-?>
-<script type="text/javascript">
-		var Server;
+	$(document).ready(function() {
+		log('Connecting...');
+		Server = new ZS('ws://192.168.3.253:9000');
 
-		function log( text ) {
-			$log = $('#log');
-			//Add text to log
-			$log.append(($log.val()?"\n":'')+text);
-			//Autoscroll
-			$log[0].scrollTop = $log[0].scrollHeight - $log[0].clientHeight;
-		}
-
-		function send( text ) {
-			Server.send( text );
-		}
-
-		$(document).ready(function() {
-			log('Connecting...');
-			Server = new ZS('ws://192.168.3.253:9000');
-
-			$('#message').keypress(function(e) {
-				if ( e.keyCode == 13 && this.value ) {
-					log( 'You: ' + this.value );
-					message = '{"message":"tirth","action":"index","controller":"index","module":"default"}';
-					send( message );
-					$(this).val('');
-				}
-			});
-
-			//Let the user know we're connected
-			Server.bind('open', function() {
-				log( "Connected." );
-			});
-
-			//OH NOES! Disconnection occurred.
-			Server.bind('close', function( data ) {
-				log( "Disconnected." );
-			});
-
-			//Log any messages sent from server
-			Server.bind('message', function( payload ) {
-				json = $.parseJSON(payload);
-				console.log(payload);
-				$(".output").html(json.message);
-			});
-
-			Server.connect();
+		$('#message').keypress(function(e) {
+			if ( e.keyCode == 13 && this.value ) {
+				log( 'You: ' + this.value );
+				message = '{"message":"tirth","action":"index","controller":"index","module":"default"}';
+				send( message );
+				$(this).val('');
+			}
 		});
-	</script>
+
+		//Let the user know we're connected
+		Server.bind('open', function() {
+			log( "Connected." );
+		});
+
+		//OH NOES! Disconnection occurred.
+		Server.bind('close', function( data ) {
+			log( "Disconnected." );
+		});
+
+		//Log any messages sent from server
+		Server.bind('message', function( payload ) {
+			json = $.parseJSON(payload);
+			console.log(payload);
+			$(".output").html(json.message);
+		});
+
+		Server.connect();
+	});
+<?php $this->headScript()->captureEnd(); ?>
 <div id='body'>
-	<textarea id='log' name='log' readonly='readonly'></textarea>
-	<br /> <input type='text' id='message' name='message' />
+	<?php echo $this->form;?>
+	<!-- <textarea id='log' name='log' readonly='readonly'></textarea>  -->
+	<!-- <br /> <input type='text' id='message' name='message' /> -->
 </div>
 <div class="output"></div>
