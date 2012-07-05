@@ -6,4 +6,7 @@ class Default_IndexController extends Zend_Controller_Action {
 		$this->view->dojo()->enable();
 		/* Initialize action controller here */
 	}
+	public function indexAction() {
+		$this->view->form = new Default_Form_Index_Dojo();
+	}
 }
