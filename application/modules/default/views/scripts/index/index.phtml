@@ -1,16 +1,18 @@
 <?php $this->placeholder('css')->captureStart(); ?>
-input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
-#body {max-width: 800px;margin: auto}
-#log {width: 100%;height: 400px}
-#message {width: 100%;line-height: 20px}
+body{margin:0; padding:0;}
+#container{padding:1%;display:block;max-width:600px;width:60%;overflow:hidden;margin:0 auto;}
+#board{padding:1%;display:block;max-width:600px;width:60%;overflow-x:hidden;margin:0 auto;max-height:400px;overflow-y:auto;}
 <?php $this->placeholder('css')->captureEnd(); ?>
 <script type="text/javascript">
 <?php $this->headScript()->captureStart()?>
 	var Server;
 	function log( text ) {
-		$log = $('#log');
+		$log = $('#board');
 		//Add text to log
-		$log.append(($log.val()?"\n":'')+text);
+		var tempText = $("<div></div>");
+		tempText.text(text);
+		text = tempText.html();
+		$log.append(($log.html()?"<br />":'')+text);
 		//Autoscroll
 		$log[0].scrollTop = $log[0].scrollHeight - $log[0].clientHeight;
 	}
@@ -47,7 +49,7 @@ input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
 		Server.bind('message', function( payload ) {
 			json = $.parseJSON(payload);
 			console.log(payload);
-			$(".output").html(json.message);
+			$("#output").html(json.message);
 		});
 
 		Server.connect();
@@ -55,9 +57,10 @@ input,textarea {border: 1px solid #CCC;margin: 0px;padding: 0px}
 	// Temporary data
 <?php $this->headScript()->captureEnd(); ?>
 </script>
-<div id='body'>
+<div>
+	<div id="board"></div>
 	<?php echo $this->form;?>
 	<!-- <textarea id='log' name='log' readonly='readonly'></textarea> -->
 	<!-- <br /> <input type='text' id='message' name='message' /> -->
 </div>
-<div class="output"></div>
+<div id="output"></div>

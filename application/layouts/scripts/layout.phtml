@@ -12,9 +12,11 @@
 	<?php echo $this->headScript();?>
 </head>
 <body <?php echo $this->dojo ()->isEnabled ()?"class='tundra'":"";?>>
+	<div id="container">
 	<?php
 		echo $this->layout ()->content;
 	?>
+	</div>
 	<script type="text/javascript">
 	</script>
 </body>
